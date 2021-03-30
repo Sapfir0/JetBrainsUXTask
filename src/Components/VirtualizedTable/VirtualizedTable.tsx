@@ -1,35 +1,24 @@
 import { useMemo, useState } from 'react';
 import { FixedSizeGrid } from 'react-window';
 import './VirtualizedTable.css';
-import tableData from "../../data.json"
 import { Columns } from '../../typings';
+import {Cell} from "../Cell"
+import React from 'react';
+import { SERVICE_IDENTIFIER } from '../../inversify/inversifyTypes';
+import { VirtualizedTableReducer } from './VirtualizedTableReducer';
+import { VirtualizedTableAction } from './VirtualizedTableAction';
+import { useInject } from '../../shared/hooks/useInject';
 
-
-const Cell = ({ columnIndex, data, rowIndex, style }: any) => {
-    const { hoveredRowIndex, setHoveredRowIndex } = data;
-    const className = hoveredRowIndex === rowIndex ? 'CellHovered' : 'Cell';
-    console.log(data)
-    return (
-        <div className={className} onMouseEnter={() => setHoveredRowIndex(rowIndex)} style={style}>
-            {rowIndex} {columnIndex}
-            {/* {tableData[rowIndex][`data${columnIndex}` as any] as any} */}
-        </div>
-    );
-};
 
 type VirtualizedTableProps = {
     columns: Columns
+    data: any[]
 }
 
+
 export const VirtualizedTable = (props: VirtualizedTableProps) => {
-    const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
-    const itemData = useMemo(
-        () => ({
-            hoveredRowIndex,
-            setHoveredRowIndex,
-        }),
-        [hoveredRowIndex],
-    );
+    const action = useInject<VirtualizedTableAction>(SERVICE_IDENTIFIER.VirtualizedTableAction)
+    const reducer = useInject<VirtualizedTableReducer>(SERVICE_IDENTIFIER.VirtualizedTableReducer)
 
     return (
         <>
@@ -38,9 +27,8 @@ export const VirtualizedTable = (props: VirtualizedTableProps) => {
                 columnCount={5}
                 columnWidth={100}
                 height={800}
-                itemData={itemData}
-                rowCount={tableData.length}
-                // rowCount={50000}
+                itemData={action}
+                rowCount={props.data.length}
                 width={1100}
             >
                 {Cell}
