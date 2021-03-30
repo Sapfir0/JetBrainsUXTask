@@ -13,4 +13,10 @@
         "source.organizeImports": true,
         "source.fixAll.eslint": true
     },
+    "files.exclude": {
+        "*.json": true
+    },
+    "search.exclude": {
+        "*.json": true,
+    },
 }
