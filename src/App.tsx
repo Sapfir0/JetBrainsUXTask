@@ -1,9 +1,10 @@
 import React from 'react';
+import { VirtualizedTable } from './Components/VirtualizedTable/VirtualizedTable';
 
 function App() {
     return (
         <div className="App">
-            <header className="App-header">See it</header>
+            <VirtualizedTable />
         </div>
     );
 }
