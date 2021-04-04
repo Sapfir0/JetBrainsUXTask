@@ -7,10 +7,9 @@ import { FILTER_NAME_CHANGED, FILTER_VALUE_CHANGED, GET_LIST, SET_HEADERS, SORT_
 
 @injectable()
 export class VirtualizedTableAction {
-    public getList = (filterName: string | undefined, filterValue: string | undefined, sortField: string, sortDirection: SortDirection): ActionTypePayload<any, any> => ({
+    public getList = (): ActionTypePayload<any, any> => ({
         type: GET_LIST,
         payload: {
-            filterName, filterValue, sortField, sortDirection
         }
     })
 
@@ -21,14 +20,14 @@ export class VirtualizedTableAction {
         }
     })
 
-    public sortDirectionChanged = <T>(sortField: keyof T, sortDirection: SortDirection): ActionTypePayload<SortPayload<T>, any> => ({
+    public sortDirectionChanged = <T>(sortField: string, sortDirection: SortDirection): ActionTypePayload<SortPayload, any> => ({
         type: SORT_DIRECTION_CHANGED,
         payload: {
             sortField, sortDirection
         }
     })
 
-    public filterNameChanged = <T>(filterName: keyof T | undefined): ActionTypePayload<FilterNamePayload<T>, any> => ({
+    public filterNameChanged = <T>(filterName: string | undefined): ActionTypePayload<FilterNamePayload, any> => ({
         type: FILTER_NAME_CHANGED,
         payload: {
             filterName

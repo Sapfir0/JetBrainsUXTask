@@ -6,5 +6,6 @@ export const VirtualizedTablePropsInitial: VirtualizedTableReduxProps = {
     sortBy: 'id',
     sortDir: 'desc',
     headers: [],
-    data: []
+    data: [],
+    originalData: []
 };

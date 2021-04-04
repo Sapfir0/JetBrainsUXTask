@@ -25,6 +25,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
                 filterValueChanged: actions.filterValueChanged,
                 sortDirectionChanged: actions.sortDirectionChanged,
                 setHeaders: actions.setHeaders,
+                getList: actions.getList
             }, dispatch)
         }
     }

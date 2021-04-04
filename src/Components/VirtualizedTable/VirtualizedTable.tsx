@@ -1,35 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FixedSizeGrid } from 'react-window';
-import { SERVICE_IDENTIFIER } from '../../inversify/inversifyTypes';
-import { useInject } from '../../shared/hooks/useInject';
-import { Column, FilterButton, HeadersBaseSettings, SortButton as SortButtonType } from '../../typings';
-import { Cell } from '../Cell';
+import { reverseDirection } from 'shared/utils';
+import { Column, FilterButton, HeadersBaseSettings, SortButton as SortButtonType, SortDirection } from '../../typings';
 import { InputField } from '../InputField';
 import { SearchButton } from '../SearchButton';
 import { SortButton } from '../SortButton';
 import './VirtualizedTable.css';
 import { VirtualizedTableAction } from './VirtualizedTableAction';
-import { VirtualizedTableReducer } from './VirtualizedTableReducer';
 
 export type VirtualizedTableProps = {
     columns: Column[];
-    data: any[];
-    actions: VirtualizedTableAction
+    actions: VirtualizedTableAction;
 };
 
 export type VirtualizedTableReduxProps = {
-    sortBy: any;
-    sortDir: any;
-    filterName: any;
-    filterValue: any;
-    headers: Column[]
-    data: any[]
+    sortBy: string;
+    sortDir: SortDirection;
+    filterName: string | undefined;
+    filterValue: string | undefined;
+    headers: Column[];
+    data: Subject[];
+    originalData: Subject[]
+};
+
+export type Subject = {
+    id: number
+    data1: string
+    data2: string
+    data3: string
+    data4: string
 }
 
 export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTableReduxProps) => {
     const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
-    const {actions} = props
-    console.log(props);
+    const { actions } = props;
+    useEffect(() => {
+        actions.getList();
+    }, [actions]);
+
     
     const w = 200;
 
@@ -38,7 +46,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
 
         if (sortButton === false) {
             return null;
-        }        
+        }
 
         if (sortButton === undefined) {
             return (
@@ -85,9 +93,10 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
         const headerElements = props.columns.map((header, i) => {
             const filterButton = header.buttons?.filterButton;
             const sortButton = header.buttons?.sortButton;
-            
-            const handleSortClick = () => {                
-                actions.sortDirectionChanged(header.text, props.sortDir);
+
+            const handleSortClick = () => {
+                const sortDir = props.sortBy === header.text ? reverseDirection(props.sortDir) : 'asc' 
+                actions.sortDirectionChanged(header.text, sortDir);
             };
 
             const handleFilterValueChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,9 +110,12 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
 
             const sortElement = getSortButton(sortButton, header.text, handleSortClick);
             const filterElement = getFilterButton(filterButton, header.text, handleFilterValueChanged, onClose);
- 
+
             return (
-                <div key={header.text.toString()} style={{ position: 'absolute', left: w * i + w / 2, width: w , zIndex: 1}}>
+                <div
+                    key={header.text.toString()}
+                    style={{ position: 'absolute', left: w * i + w / 4, width: w, zIndex: 1 }}
+                >
                     {header.text}
                     {filterElement}
                     {sortElement}
@@ -111,12 +123,24 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             );
         });
 
-        return headerElements;
+        return <div>{headerElements}</div>;
     };
 
-    const renderBody = (records?: Array<any>): React.ReactNode => (
+    const renderCell = (columns: Column[], records: any[]) => ({ columnIndex, data, rowIndex, style }: any) => {
+        const { hoveredRowIndex, setHoveredRowIndex } = data;
+        const className = hoveredRowIndex === rowIndex ? 'CellHovered' : 'Cell';
+        const columnName = columns[columnIndex].text;
+
+        return (
+            <div className={className} onMouseEnter={() => setHoveredRowIndex(rowIndex)} style={style}>
+                {props.data[rowIndex][columnName]}
+            </div>
+        );
+    };
+
+    const renderBody = (columns: Column[], records: any[]): React.ReactNode => (
         <FixedSizeGrid
-            style={{zIndex: 0}}
+            style={{ zIndex: 0 }}
             rowHeight={100}
             columnCount={props.columns.length}
             columnWidth={w}
@@ -125,14 +149,14 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             rowCount={props.data.length}
             width={1100}
         >
-            {Cell}
+            {renderCell(columns, records)}
         </FixedSizeGrid>
     );
 
     return (
         <>
             {renderHeaders(props.columns as any)}
-            {renderBody(props.data)}
+            {renderBody(props.columns, props.data)}
         </>
     );
 };

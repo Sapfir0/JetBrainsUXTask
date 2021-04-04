@@ -2,8 +2,8 @@ import { SortDirection } from "typings"
 
 export type PagePayload = {  page: number }
 export type PageSizePayload = {  pageSize: number }
-export type SortPayload<T> = {  sortField: keyof T, sortDirection: SortDirection }
-export type FilterNamePayload<T> = {  filterName: keyof T | undefined }
+export type SortPayload = {  sortField: string, sortDirection: SortDirection }
+export type FilterNamePayload = {  filterName: string| undefined }
 export type FilterValuePayload = {  filterValue: string | undefined }
 export type StartDatePayload = {  startDate: Date | null }
 export type EndDatePayload = {  endDate: Date | null }
@@ -22,4 +22,4 @@ export interface ActionTypePure<ActionType> {
 
 
 export interface ListConfig<T> extends PageSizePayload,
-    PagePayload, SortPayload<T>, FilterValuePayload, FilterNamePayload<T> {}
+    PagePayload, SortPayload, FilterValuePayload, FilterNamePayload {}
