@@ -8,7 +8,7 @@ export type FilterValuePayload = {  filterValue: string | undefined }
 export type StartDatePayload = {  startDate: Date | null }
 export type EndDatePayload = {  endDate: Date | null }
 export type SelectedUploadProjects = { id: string }
-export type ConfigPayload<T> = { config: ListConfig<T> }
+export type ConfigPayload = { config: ListConfig }
 export type ImagesPayload = { imagesUrl: Array<string> }
 
 export interface ActionTypePayload<PayloadType, ActionType> {
@@ -21,5 +21,5 @@ export interface ActionTypePure<ActionType> {
 }
 
 
-export interface ListConfig<T> extends PageSizePayload,
+export interface ListConfig extends PageSizePayload,
     PagePayload, SortPayload, FilterValuePayload, FilterNamePayload {}
