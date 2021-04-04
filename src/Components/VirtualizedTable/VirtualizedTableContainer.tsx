@@ -1,16 +1,16 @@
-import {AnyAction, bindActionCreators, Dispatch} from "redux";
-import {container} from "../../inversify/inverisfyContainer";
-import {SERVICE_IDENTIFIER} from "../../inversify/inversifyTypes";
-import {connect} from "react-redux";
-import {RootStore} from "../../../Store";
-import ProjectCard, {IProjectCard} from "./ProjectCard";
-import { VirtualizedTableProps } from "./VirtualizedTableProps";
 import React from "react";
+import { connect } from "react-redux";
+import { AnyAction, bindActionCreators, Dispatch } from "redux";
+import { RootReducer } from "Store/reducers";
+import { container } from "../../inversify/inverisfyContainer";
+import { SERVICE_IDENTIFIER } from "../../inversify/inversifyTypes";
+import { RootStore } from "../../Store";
+import { VirtualizedTable, VirtualizedTableProps } from "./VirtualizedTable";
 import { VirtualizedTableAction } from "./VirtualizedTableAction";
 
 
-function VirtualizedTableContainer(props: VirtualizedTableProps) {
 
+function VirtualizedTableContainer(props: any) {
     return <VirtualizedTable {...props}/>
 }
 
@@ -21,15 +21,24 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
         dispatch,
         actions: {
             ...bindActionCreators({
-                actions.SelectRow
+                filterNameChanged: actions.filterNameChanged,
+                filterValueChanged: actions.filterValueChanged,
+                sortDirectionChanged: actions.sortDirectionChanged,
+                setHeaders: actions.setHeaders,
             }, dispatch)
         }
     }
 }
 
-const mapStateToProps = (state: RootStore) => {
+const mapStateToProps = (state: RootReducer) => {
+    
     return {
-
+        data: state.subjectList.data,
+        sortDir: state.subjectList.sortDir,
+        sortBy: state.subjectList.sortBy,
+        filterName: state.subjectList.filterName,
+        filterValue: state.subjectList.filterValue,
+        headers: state.subjectList.headers,
     }
 }
 

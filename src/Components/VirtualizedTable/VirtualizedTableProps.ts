@@ -1,7 +1,10 @@
-export type VirtualizedTableProps = {
-    selectedRow: number | null;
-};
+import { VirtualizedTableReduxProps } from "./VirtualizedTable";
 
-export const VirtualizedTablePropsInitial: VirtualizedTableProps = {
-    selectedRow: null,
+export const VirtualizedTablePropsInitial: VirtualizedTableReduxProps = {
+    filterName: undefined,
+    filterValue: undefined,
+    sortBy: 'id',
+    sortDir: 'desc',
+    headers: [],
+    data: []
 };

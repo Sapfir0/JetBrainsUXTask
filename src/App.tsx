@@ -1,20 +1,29 @@
+import VirtualizedTableContainer from 'Components/VirtualizedTable/VirtualizedTableContainer';
 import React from 'react';
-import tableData from './data.json';
-import { VirtualizedTable } from './Components/VirtualizedTable/VirtualizedTable';
-import { Columns } from './typings';
+import { Column } from './typings';
+
+const range = (count: number) => [...Array(count).keys()];
+
+const tableData = range(50000).map((el, i) => ({
+    id: i,
+    data1: `data1 ${i}`,
+    data2: `data2 ${i}`,
+    data3: `data3 ${i}`,
+    data4: `data4 ${i}`,
+}));
 
 function App() {
-    const columns: Columns = [
-        { name: 'id' },
-        { name: 'data1' },
-        { name: 'data2' },
-        { name: 'data3' },
-        { name: 'data4' },
+    const columns: Column[] = [
+        { text: 'id' },
+        { text: 'data1' },
+        { text: 'data2' },
+        { text: 'data3' },
+        { text: 'data4' },
     ];
 
     return (
         <div className="App">
-            <VirtualizedTable data={tableData} columns={columns} />
+            <VirtualizedTableContainer columns={columns} />
         </div>
     );
 }
