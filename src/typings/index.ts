@@ -35,7 +35,7 @@ export interface Column<DTO=any> {
 
 
 
-export interface ISubjectListState<TDto> extends ListConfig<TDto> {
+export interface ISubjectListState<TDto> extends ListConfig {
     items?: TDto[];
     headers: HeadersBaseSettings<TDto>
     totalItems: number;
