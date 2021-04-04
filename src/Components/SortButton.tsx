@@ -12,7 +12,7 @@ export interface SortButtonProps {
 
 export const SortButton = (props: SortButtonProps): React.ReactElement => {    
     return (
-        <IconButton onClick={props.onClick}>
+        <IconButton color={props.selected ? 'primary' : 'default'} onClick={props.onClick}>
             {props.direction === 'desc' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
         </IconButton>
     );

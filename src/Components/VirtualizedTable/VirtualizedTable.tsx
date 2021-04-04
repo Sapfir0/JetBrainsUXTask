@@ -114,7 +114,6 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             return (
                 <div
                     key={header.text.toString()}
-                    style={{ position: 'absolute', left: w * i + w / 4, width: w, zIndex: 1 }}
                 >
                     {header.text}
                     {filterElement}
@@ -123,7 +122,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             );
         });
 
-        return <div>{headerElements}</div>;
+        return <div style={{ display: 'flex', flexDirection: 'row',  zIndex: 1, width: w * headerElements.length, justifyContent: 'space-around' }}>{headerElements}</div>;
     };
 
     const renderCell = (columns: Column[], records: any[]) => ({ columnIndex, data, rowIndex, style }: any) => {
