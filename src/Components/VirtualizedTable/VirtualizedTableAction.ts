@@ -20,14 +20,14 @@ export class VirtualizedTableAction {
         }
     })
 
-    public sortDirectionChanged = <T>(sortField: string, sortDirection: SortDirection): ActionTypePayload<SortPayload, any> => ({
+    public sortDirectionChanged = (sortField: string, sortDirection: SortDirection): ActionTypePayload<SortPayload, any> => ({
         type: SORT_DIRECTION_CHANGED,
         payload: {
             sortField, sortDirection
         }
     })
 
-    public filterNameChanged = <T>(filterName: string | undefined): ActionTypePayload<FilterNamePayload, any> => ({
+    public filterNameChanged = (filterName: string | undefined): ActionTypePayload<FilterNamePayload, any> => ({
         type: FILTER_NAME_CHANGED,
         payload: {
             filterName
