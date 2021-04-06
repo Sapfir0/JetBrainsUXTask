@@ -50,19 +50,6 @@ export class VirtualizedTableReducer {
 
         newState.filterValue = payload.filterValue
 
-        const {filterName, filterValue} = newState
-
-        if (filterName === undefined || filterValue === undefined) {
-            newState.data = newState.originalData;
-            return newState
-        }
-
-        try {
-            newState.data = newState.originalData.filter(el => el[filterName].match(new RegExp(filterValue)));
-        } catch (e) {
-            console.log(e);
-        }
-          
         return newState;
     }
 
@@ -80,24 +67,6 @@ export class VirtualizedTableReducer {
 
         newState.sortBy = payload.sortField
         newState.sortDir = payload.sortDirection
-
-        const sortableData = [...newState.data].sort(( a: Subject, b: Subject ) => { 
-            const parsedA = Number.parseInt(a[newState.sortBy])
-            const parsedB = Number.parseInt(b[newState.sortBy])
-
-            if (isNaN(parsedA) && isNaN(parsedB)) {
-                return a[newState.sortBy].localeCompare(b[newState.sortBy]) 
-            } else {
-                return parsedA - parsedB
-            }
-        })
- 
-
-        if (payload.sortDirection === 'desc') {
-            newState.data = sortableData;
-        } else {
-            newState.data = sortableData.reverse()
-        }
 
         return newState;
     }

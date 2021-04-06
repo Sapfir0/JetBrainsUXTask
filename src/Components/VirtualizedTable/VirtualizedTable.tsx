@@ -19,7 +19,6 @@ export type VirtualizedTableReduxProps = {
     sortDir: SortDirection;
     filterName: string | undefined;
     filterValue: string | undefined;
-    headers: Column[];
     data: Subject[];
     originalData: Subject[]
 };
