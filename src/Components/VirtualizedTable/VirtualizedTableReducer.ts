@@ -11,8 +11,6 @@ export class VirtualizedTableReducer {
         switch (action.type) {
             case GET_LIST:
                 return this.getList(state, action.payload)
-            case SET_HEADERS:
-                return this.setHeader(state, action.payload)
             case SORT_DIRECTION_CHANGED:
                 return this.sortDirectionChanged(state, action.payload)
             case FILTER_NAME_CHANGED:
@@ -42,15 +40,6 @@ export class VirtualizedTableReducer {
 
         newState.data = list
         newState.originalData = list
-
-        return newState;
-    }
-
-
-    protected setHeader(state: VirtualizedTableReduxProps, payload: any): VirtualizedTableReduxProps {
-        const newState = {...state};
-
-        newState.headers = payload.headers;
 
         return newState;
     }

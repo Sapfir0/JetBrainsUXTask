@@ -11,6 +11,7 @@ import { VirtualizedTableAction } from './VirtualizedTableAction';
 export type VirtualizedTableProps = {
     columns: Column[];
     actions: VirtualizedTableAction;
+    state: VirtualizedTableReduxProps
 };
 
 export type VirtualizedTableReduxProps = {
@@ -31,18 +32,20 @@ export type Subject = {
     data4: string
 }
 
-export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTableReduxProps) => {
+export const VirtualizedTable = (props: VirtualizedTableProps) => {
     const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
     const { actions } = props;
     useEffect(() => {
         actions.getList();
     }, [actions]);
 
+    console.log(props);
     
-    const w = 200;
+    
+    const сolumnWidth = 200;
 
     const getSortButton = (sortButton: SortButtonType | false | undefined, name: any, handleSortClick: () => void) => {
-        const activeButton = name === props.sortBy;
+        const activeButton = name === props.state.sortBy;
 
         if (sortButton === false) {
             return null;
@@ -53,12 +56,12 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
                 <SortButton
                     onClick={handleSortClick}
                     selected={activeButton}
-                    direction={activeButton ? props.sortDir : 'desc'}
+                    direction={activeButton ? props.state.sortDir : 'desc'}
                 />
             );
         }
 
-        return sortButton.element(handleSortClick, activeButton, props.sortDir);
+        return sortButton.element(handleSortClick, activeButton, props.state.sortDir);
     };
 
     const getFilterButton = (
@@ -69,7 +72,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
     ) => {
         const defaultInput = <InputField onClose={onClose} onChange={onChange} />;
         const defaultButton = <SearchButton onClick={() => actions.filterNameChanged(name as string)} />;
-        const isActiveButton = name === props.filterName;
+        const isActiveButton = name === props.state.filterName;
         if (filterButton === false) {
             // если сказано, что false, то не рендерим компонент
             return null;
@@ -95,7 +98,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             const sortButton = header.buttons?.sortButton;
 
             const handleSortClick = () => {
-                const sortDir = props.sortBy === header.text ? reverseDirection(props.sortDir) : 'asc' 
+                const sortDir = props.state.sortBy === header.text ? reverseDirection(props.state.sortDir) : 'asc' 
                 actions.sortDirectionChanged(header.text, sortDir);
             };
 
@@ -122,7 +125,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             );
         });
 
-        return <div style={{ display: 'flex', flexDirection: 'row',  zIndex: 1, width: w * headerElements.length, justifyContent: 'space-around' }}>{headerElements}</div>;
+        return <div style={{ display: 'flex', flexDirection: 'row',  zIndex: 1, width: сolumnWidth * headerElements.length, justifyContent: 'space-around' }}>{headerElements}</div>;
     };
 
     const renderCell = (columns: Column[], records: any[]) => ({ columnIndex, data, rowIndex, style }: any) => {
@@ -132,7 +135,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
 
         return (
             <div className={className} onMouseEnter={() => setHoveredRowIndex(rowIndex)} style={style}>
-                {props.data[rowIndex][columnName]}
+                {props.state.data[rowIndex][columnName]}
             </div>
         );
     };
@@ -142,10 +145,10 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
             style={{ zIndex: 0 }}
             rowHeight={100}
             columnCount={props.columns.length}
-            columnWidth={w}
+            columnWidth={сolumnWidth}
             height={800}
             itemData={{ hoveredRowIndex, setHoveredRowIndex }}
-            rowCount={props.data.length}
+            rowCount={props.state.data.length}
             width={1100}
         >
             {renderCell(columns, records)}
@@ -155,7 +158,7 @@ export const VirtualizedTable = (props: VirtualizedTableProps & VirtualizedTable
     return (
         <>
             {renderHeaders(props.columns as any)}
-            {renderBody(props.columns, props.data)}
+            {renderBody(props.columns, props.state.data)}
         </>
     );
 };

@@ -6,6 +6,7 @@ import { container } from '../../inversify/inverisfyContainer';
 import { SERVICE_IDENTIFIER } from '../../inversify/inversifyTypes';
 import { VirtualizedTable } from './VirtualizedTable';
 import { VirtualizedTableAction } from './VirtualizedTableAction';
+import { makeTableState } from './VirtualizedTableSelectors';
 
 function VirtualizedTableContainer(props: any) {
     return <VirtualizedTable {...props} />;
@@ -21,7 +22,6 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
                     filterNameChanged: actions.filterNameChanged,
                     filterValueChanged: actions.filterValueChanged,
                     sortDirectionChanged: actions.sortDirectionChanged,
-                    setHeaders: actions.setHeaders,
                     getList: actions.getList,
                 },
                 dispatch,
@@ -31,13 +31,10 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
 }
 
 const mapStateToProps = (state: RootReducer) => {
+    const tableData = makeTableState()
+
     return {
-        data: state.subjectList.data,
-        sortDir: state.subjectList.sortDir,
-        sortBy: state.subjectList.sortBy,
-        filterName: state.subjectList.filterName,
-        filterValue: state.subjectList.filterValue,
-        headers: state.subjectList.headers,
+        state: tableData(state.subjectList)
     };
 };
 

@@ -13,13 +13,6 @@ export class VirtualizedTableAction {
         }
     })
 
-    public setHeaders = (headers: Column[]): ActionTypePayload<any, any> => ({
-        type: SET_HEADERS,
-        payload: {
-            headers
-        }
-    })
-
     public sortDirectionChanged = (sortField: string, sortDirection: SortDirection): ActionTypePayload<SortPayload, any> => ({
         type: SORT_DIRECTION_CHANGED,
         payload: {
