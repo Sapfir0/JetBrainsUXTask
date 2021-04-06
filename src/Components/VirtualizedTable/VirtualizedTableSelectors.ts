@@ -21,7 +21,7 @@ export const makeTableState = () => {
             
             if (filterName !== undefined && filterValue !== undefined) {
                 try{
-                    resultedData = tableData.originalData.filter(el => el[filterName].match(new RegExp(filterValue)))
+                    resultedData = tableData.originalData.filter(el => el[filterName].toString().match(new RegExp(filterValue)))
                 } catch (e) {}
             }
     
